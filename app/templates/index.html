@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ settings.brand }} | Your Second Home in the City</title>
+<meta name="description" content="{{ settings.hero_description }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="site-header" id="top">
+<div class="container nav-wrap">
+<a class="brand" href="#home"><span class="brand-mark">⌂</span><span>Pari<span>Pg</span></span></a>
+<button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+<nav class="main-nav" id="mainNav">
+<a href="#home" class="active">Home</a><a href="#about">About</a><a href="#rooms">Rooms</a><a href="#facilities">Facilities</a><a href="#gallery">Gallery</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+</nav>
+<div class="nav-actions"><a class="phone-pill" href="tel:{{ settings.phone }}">☎ {{ settings.phone }}</a><a class="btn btn-primary small" href="#contact">▣ Book Now</a></div>
+</div>
+</header>
+
+<main>
+<section class="hero" id="home">
+<div class="hero-image" style="background-image:url('{{ settings.hero_image }}')"></div><div class="hero-overlay"></div>
+<div class="container hero-content">
+<div class="hero-copy">
+<div class="eyebrow light">{{ settings.hero_eyebrow }}</div>
+<h1>{{ settings.hero_title_line1 }} <span>{{ settings.hero_title_highlight }}</span><br><span>{{ settings.hero_title_line2 }}</span></h1>
+<p>{{ settings.hero_description }}</p>
+<div class="hero-buttons"><a class="btn btn-primary" href="#contact">▣ Book Your Room</a><a class="btn btn-outline-light" href="#rooms">View Rooms →</a></div>
+<div class="hero-features"><div><b>◉</b><span>24/7<br>Security</span></div><div><b>⌁</b><span>High Speed<br>WiFi</span></div><div><b>✣</b><span>Nutritious<br>Meals</span></div><div><b>▰</b><span>Fully<br>Furnished</span></div></div>
+</div>
+<div class="hero-stats"><div><strong>{{ settings.happy_residents }}</strong><span>Happy Residents</span></div><div><strong>{{ settings.room_count }}</strong><span>Rooms</span></div><div><strong>{{ settings.rating }}</strong><span>Rating</span></div></div>
+</div>
+</section>
+
+<section class="room-finder">
+<div class="container finder-grid">
+<div class="finder-title"><h2>Find Your <span>Perfect Room</span></h2><p>Check availability and book your room easily.</p></div>
+<label>Room Type<select id="filterType"><option value="all">All Room Types</option>{% for r in rooms %}<option value="{{ r.room_type }}">{{ r.title }}</option>{% endfor %}</select></label>
+<label>Move-in Date<input id="moveDate" type="date"></label>
+<label>Duration<select id="filterDuration"><option value="all">Select Duration</option><option>1 Month</option><option>3 Months</option><option>6 Months</option><option>11 Months</option></select></label>
+<button class="btn btn-primary" id="checkAvailability">⌕ Check Availability</button>
+</div>
+</section>
+
+<section class="section about" id="about"><div class="container">
+<div class="section-heading split"><div><div class="eyebrow">WHY CHOOSE PARI PG?</div><h2>More Than Just a <span>Stay</span></h2><p>We provide a safe, clean and homely environment with modern facilities, healthy food and 24/7 support.</p></div></div>
+<div class="benefit-grid">
+<div class="benefit"><i>⌂</i><h3>Prime Location</h3><p>Near colleges, offices and metro stations.</p></div>
+<div class="benefit"><i>♟</i><h3>Homely Environment</h3><p>Friendly atmosphere and supportive staff.</p></div>
+<div class="benefit"><i>₹</i><h3>Affordable Pricing</h3><p>Best facilities at reasonable rent.</p></div>
+<div class="benefit"><i>◈</i><h3>Safe & Secure</h3><p>CCTV and 24/7 security support.</p></div>
+<div class="benefit"><i>♥</i><h3>Healthy Meals</h3><p>Hygienic and nutritious food.</p></div>
+<div class="benefit"><i>♧</i><h3>24/7 Support</h3><p>Always ready to help you.</p></div>
+</div></div></section>
+
+<section class="section rooms" id="rooms"><div class="container">
+<div class="section-heading split"><div><div class="eyebrow">OUR ROOMS</div><h2>Rooms for Every <span>Need</span></h2></div><button class="text-link button-link" id="viewAllRooms">View All Rooms →</button></div>
+<div class="rooms-grid" id="roomsGrid">
+{% for room in rooms %}
+<article class="room-card" data-type="{{ room.room_type }}">
+<div class="room-image-wrap"><img src="{{ room.image_url }}" alt="{{ room.title }}" loading="lazy"><span class="room-tag">{{ room.tag }}</span></div>
+<div class="room-body"><h3>{{ room.title }}</h3><div class="room-price">{{ room.price }} <small>/ month</small></div>
+<div class="room-icons">{% for x in room.meta.split(',')[:4] %}<span>▣ {{ x.strip() }}</span>{% endfor %}</div>
+<button class="btn details" data-room='{{ {"id":room.id,"title":room.title,"price":room.price,"tag":room.tag,"image":room.image_url,"description":room.description,"meta":room.meta.split(","),"features":room.features.split(",")} | tojson }}'>View Details →</button></div>
+</article>
+{% endfor %}
+</div></div></section>
+
+<section class="section facilities" id="facilities"><div class="container">
+<div class="section-heading split"><div><div class="eyebrow">OUR FACILITIES</div><h2>Everything You <span>Need</span></h2></div></div>
+<div class="facility-grid">{% for f in facilities %}<div class="facility"><i>{{ f.icon }}</i><span>{{ f.title }}</span></div>{% endfor %}</div>
+</div></section>
+
+<section class="section gallery" id="gallery"><div class="container">
+<div class="section-heading split"><div><div class="eyebrow">GALLERY</div><h2>Our PG in <span>Pictures</span></h2></div></div>
+<div class="gallery-grid">{% for g in gallery %}<img src="{{ g.image_url }}" alt="{{ g.title }}" loading="lazy" class="gallery-img">{% endfor %}</div>
+</div></section>
+
+<section class="section testimonials"><div class="container">
+<div class="section-heading"><div class="eyebrow">TESTIMONIALS</div><h2>What Our Residents <span>Say</span></h2></div>
+<div class="testimonial-grid">{% for t in testimonials %}<article class="testimonial"><div class="person"><div class="avatar">{{ t.avatar }}</div><div><b>{{ t.name }}</b><small>{{ t.role }}</small></div><span>{{ '★' * t.rating }}</span></div><p>“{{ t.text }}”</p></article>{% endfor %}</div>
+</div></section>
+
+<section class="section location"><div class="container">
+<div class="section-heading"><div class="eyebrow">OUR LOCATION</div><h2>Easily <span>Accessible</span></h2></div>
+<div class="location-grid"><div class="map-card"><iframe src="https://www.google.com/maps?q=Beta%201%20Greater%20Noida&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+<div class="location-info"><h3>Close to Everything</h3><div class="nearby-grid"><div><i>♜</i><b>5 min</b><span>to College</span></div><div><i>▣</i><b>10 min</b><span>to Metro</span></div><div><i>▦</i><b>Nearby</b><span>Markets & Shops</span></div><div><i>▰</i><b>Easy</b><span>Public Transport</span></div></div><a class="btn btn-primary" target="_blank" href="{{ settings.map_url }}">⌖ Get Directions</a></div></div>
+</div></section>
+
+<section class="contact-band" id="contact"><div class="container contact-grid">
+<div class="contact-copy"><div class="eyebrow light">CONTACT US</div><h2>Get <span>in Touch</span></h2><p>Have any questions or want to book a room? Fill out the form and we will get back to you as soon as possible.</p>
+<div class="contact-detail"><i>☎</i><div><b>{{ settings.phone }}</b><small>Call us anytime</small></div></div>
+<div class="contact-detail"><i>✉</i><div><b>{{ settings.email }}</b><small>Drop us an email</small></div></div>
+<div class="contact-detail"><i>⌖</i><div><b>Greater Noida, UP</b><small>{{ settings.address }}</small></div></div></div>
+<form class="contact-form" id="contactForm"><h3>Send Us a Message</h3>
+<div class="two-col"><label>Your Name *<input name="name" required maxlength="100" placeholder="Enter your name"></label><label>Your Email *<input name="email" type="email" required maxlength="150" placeholder="Enter your email"></label></div>
+<label>Phone Number *<input name="phone" required maxlength="20" placeholder="Enter your phone number"></label>
+<label>Message *<textarea name="message" required maxlength="2000" placeholder="Write your message here..."></textarea></label>
+<button class="btn btn-primary" type="submit" id="contactSubmit">➤ Send Message</button><p class="form-status" id="formStatus"></p></form>
+<div class="booking-card"><div class="booking-icon">PARI<br>PG</div><h3>Book Your<br>Room Today</h3><ul><li>Quick Response</li><li>Personal Assistance</li><li>Visit & Tour Available</li><li>Hassle-Free Booking</li></ul></div>
+</div></section>
+
+<section class="section faq" id="faq"><div class="container"><div class="section-heading"><div class="eyebrow">FREQUENTLY ASKED QUESTIONS</div><h2>Your Questions, <span>Answered</span></h2></div>
+<div class="faq-grid">{% for f in faqs %}<div class="faq-item"><button class="faq-question">{{ f.question }} <span>⌄</span></button><div class="faq-answer">{{ f.answer }}</div></div>{% endfor %}</div></div></section>
+</main>
+
+<footer class="footer"><div class="container footer-top"><div class="footer-brand"><a class="brand" href="#home"><span class="brand-mark">⌂</span><span>Pari<span>Pg</span></span></a><p>Your second home in the city.</p></div>
+<div><h4>Quick Links</h4><div class="footer-links"><a href="#home">→ Home</a><a href="#about">→ About</a><a href="#facilities">→ Facilities</a><a href="#gallery">→ Gallery</a><a href="#rooms">→ Rooms</a><a href="#faq">→ FAQ</a><a href="#contact">→ Contact</a></div></div>
+<div><h4>Follow Us</h4><div class="socials"><a href="#">◎</a><a href="#">f</a><a href="#">▶</a><a href="#">◔</a></div></div><a class="btn btn-primary" href="#contact">▣ Book Now</a></div>
+<div class="container footer-bottom"><span>© 2026 Pari PG. All Rights Reserved.</span><span>Privacy Policy &nbsp;|&nbsp; Terms & Conditions</span></div></footer>
+
+<button class="to-top" id="toTop">↑</button>
+<div class="modal" id="roomModal" aria-hidden="true"><div class="modal-backdrop"></div><div class="modal-card"><button class="modal-close" id="modalClose">×</button><img id="modalImage" src="" alt=""><div class="modal-body"><span class="room-badge" id="modalBadge"></span><h2 id="modalTitle"></h2><div class="modal-price" id="modalPrice"></div><p id="modalDescription"></p><div class="modal-meta" id="modalMeta"></div><h3>Room Features</h3><div class="modal-features" id="modalFeatures"></div><a class="btn btn-primary full" href="#contact" id="modalBook">Book This Room</a></div></div></div>
+<div class="toast" id="toast"></div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body></html>
